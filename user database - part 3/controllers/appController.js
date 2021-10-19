@@ -1,6 +1,6 @@
 exports.getIndex = (req, res) => {
   res.render('index', {
-    title: 'My App',
+    title: 'Solvers Club Member Area',
   });
 };
 
@@ -25,6 +25,41 @@ exports.getProfile = (req, res) => {
 
 exports.getForgetPassword = (req, res) => {
   res.render('forgot');
+};
+
+exports.getMembersDirectory = (req, res) => {
+  res.render('members', {
+    title: 'Directory',
+    user: req.session.authenticated,
+  });
+};
+
+exports.getDiscovery = (req, res) => {
+  res.render('discovery', {
+    title: 'Challenge Discovery',
+    user: req.session.authenticated,
+  });
+};
+
+exports.getMembersUpdate = (req, res) => {
+  res.render('update', {
+    title: 'Update',
+    user: req.session.authenticated,
+  });
+};
+
+exports.getResources = (req, res) => {
+  res.render('resources', {
+    title: 'Resources',
+    user: req.session.authenticated,
+  });
+};
+
+exports.getDelete = (req, res) => {
+  res.render('delete', {
+    title: 'Delete',
+    user: req.session.authenticated,
+  });
 };
 
 exports.getResetPassword = (req, res) => {

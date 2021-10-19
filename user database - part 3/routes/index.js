@@ -12,6 +12,11 @@ router.get('/logout', userController.logout);
 router.get('/profile', userController.isLoggedIn, appController.getProfile);
 router.get('/forgot-password', appController.getForgetPassword);
 router.get('/login/resetlink/:token', appController.getResetPassword);
+router.get('/members', userController.isLoggedIn, appController.getMembersDirectory);
+router.get('/discovery', userController.isLoggedIn, appController.getDiscovery);
+router.get('/update', userController.isLoggedIn, appController.getMembersUpdate);
+router.get('/resources', userController.isLoggedIn, appController.getResources);
+router.get('/delete', userController.isLoggedIn, appController.getDelete);
 
 router.post(
   '/user/add',

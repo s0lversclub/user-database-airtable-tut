@@ -55,6 +55,16 @@ const generateResetUrl = (token, email) => {
   return url;
 };
 
+const isUserApproved = (username) => {
+
+  if (username.get('approval') === 'Approved') {
+    console.log ('Approved');
+    return true;
+  }
+  console.log ('Rejected');
+  return false;
+};
+
 // End Helper Functions
 
 exports.addUser = async (req, res, next) => {
@@ -135,16 +145,23 @@ exports.authenticate = (req, res, next) => {
     .getAirtableRecords(table, options)
     .then(users => {
       users.forEach(function(user) {
-        bcrypt.compare(password, user.get('password'), function(err, response) {
-          if (response) {
-            // Passwords match, response = true
-            req.session.authenticated = user.fields;
-            res.redirect('/profile');
-          } else {
-            // Passwords don't match
-            console.log(err);
-          }
-        });
+        if (isUserApproved(user)) {
+          bcrypt.compare(password, user.get('password'), function(err, response) {
+            if (response) {
+              // Passwords match, response = true
+              req.session.authenticated = user.fields;
+              res.redirect('/profile');
+            } else {
+              // Passwords don't match
+              console.log(err);
+            }
+          });
+        }
+        else {
+          res.render('login', {
+            message: 'Sorry, but your application has not been approved. We normally take 48 hours to review applications. Please contact us on info@solversclub.com if you applied before that, and have not heard back from us.',
+          });
+        }
       });
     })
     .catch(err => {
@@ -216,7 +233,7 @@ exports.addToken = async (req, res, next) => {
 };
 
 exports.sendPasswordResetEmail = async (req, res) => {
-  const subject = 'Password Reset link for My Sweet App';
+  const subject = 'Password Reset link for Solvers Club';
   const { url, to } = req.body;
   const body = `Hello,
   You requested to have your password reset. Ignore if this is a mistake or you did not make this request. Otherwise, click the link below to reset your password.
